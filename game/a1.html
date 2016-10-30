@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<Meta http-equiv="Content-Type" Content="text/html; Charset=utf-8">
+		<title>点击按钮</title>
+		<style>
+			#a1{
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 80px;
+				height: 25px;
+			}
+		</style>
+		<script>
+			var a1;
+			var count=0;
+			var msg=new Array(0);
+			function load(){
+				a1=document.getElementById("a1");
+				msg.push("点击关闭");
+				msg.push("手残是病");
+				msg.push("点不到我");
+				msg.push("快来点我");
+			}
+			function mv(){
+				var ran=Math.random()*800;
+				a1.style.left=ran+"px";
+				ran=Math.random()*500;
+				a1.style.top=ran+"px";
+				ran=Math.random()*400;
+				ran=parseInt(ran);
+				switch(ran%4){
+					case 0:a1.value=msg[0];break;
+					case 1:a1.value=msg[1];break;
+					case 2:a1.value=msg[2];break;
+					case 3:a1.value=msg[3];break;
+				}
+				count++;
+			}
+			function clk(){
+				alert("你一共点击了"+count+"次才点击到");
+			}
+		</script>
+	</head>
+	<body onload="load();">
+		<input type="button" value="点击关闭" id="a1" onmouseover="mv();" onclick="clk();" />
+	</body>
+</html>

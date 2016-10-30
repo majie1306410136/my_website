@@ -1,0 +1,51 @@
+#container{
+	margin-left: auto;
+	margin-right: auto;
+	width: 400px;
+}
+#mycanvas{
+	border: 1px solid #6c6c6c;
+}
+.input{
+	position:relative;
+}
+.input button{
+	width:80px;
+	height:80px;
+	border:0;
+	border-radius:50%;
+	text-align:center;
+	position:absolute;
+	outline:0;
+	display:none;
+	-webkit-user-select:none;
+}
+.input button:active{
+	-webkit-box-shadow: inset 0 0 50px #ccc;
+	box-shadow: inset 0 0 25px #ccc;
+}
+#Left{
+	display:block;
+	left:0px;
+	top: 10px;
+}
+#Right{
+	display:block;
+	left:100px;
+	top: 10px;
+}
+#Down{
+	display:block;
+	left:50px;
+	top: 80px;
+}
+#Change{
+	display:block;
+	left:300px;
+	top: 10px;
+}
+#Fall{
+	display:block;
+	left:250px;
+	top: 80px;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<Meta http-equiv="Content-Type" Content="text/html; Charset=utf-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>消灭黑块</title>
+</head>
+<script type="text/javascript">
+	var clicknum=0;
+	var all=new Array(16);
+	function aa(){
+		for(var i=1;i<17;i++){
+			var b = "a"+i;
+			all[i-1]=document.getElementById(b);
+			all[i-1].style.background = "black";
+		}
+	}
+	function onClick(a){
+		clicknum+=1;
+		var n=a.id;
+		n=n.substr(1,2);
+		var num = parseInt(n);
+		num=num-1;
+		if(all[num].style.background=="black"){
+			all[num].style.background = "white";
+		}
+		else{
+			all[num].style.background = "black";
+		}
+
+		if(all[num%4 + (parseInt(num/4)+1)*4]!=null && parseInt(num/4)<3){
+			if(all[num%4 + (parseInt(num/4)+1)*4].style.background=="black")
+				all[num%4 + (parseInt(num/4)+1)*4].style.background = "white";
+			else
+				all[num%4 + (parseInt(num/4)+1)*4].style.background = "black";
+		}
+
+		if(all[num%4 + (parseInt(num/4)-1)*4]!=null){
+			if(all[num%4 + (parseInt(num/4)-1)*4].style.background=="black")
+				all[num%4 + (parseInt(num/4)-1)*4].style.background = "white";
+			else
+				all[num%4 + (parseInt(num/4)-1)*4].style.background = "black";
+		}
+
+		if((num+1)%4!=0){
+			if(all[num+1].style.background=="black")
+				all[num+1].style.background = "white";
+			else
+				all[num+1].style.background = "black";
+		}
+
+		if(num%4!=0){
+			if(all[num-1].style.background=="black")
+				all[num-1].style.background = "white";
+			else
+				all[num-1].style.background = "black";
+		}
+		
+		var winnum=0;
+		for(var i=0;i<16;i++){
+			if(all[i].style.background == "white")
+				winnum+=1;
+			if(winnum==16)
+				alert("你赢了,总共点了"+clicknum+"次,刷新可以重新开始游戏");
+		}
+
+	}
+</script>
+<style type="text/css">
+	body{
+		background: gray;
+	}
+	.container{
+		text-align: center;
+		margin: 0px auto;
+	}
+	.content{
+		width: 600px;
+		height: 600px;
+		margin: 0px auto;
+	}
+	.title{
+		font-weight: bold;
+		border: 3px double black;
+		font-size: 30px;
+	}
+	.help{
+		font-size: 20px;
+		border: 3px double black;
+	}
+	div li{
+		width: 148px;
+		height: 148px;
+		margin: 0px 1px;
+		display: inline-block;
+	}
+</style>
+<body onload="aa()">
+	<div class="container">
+			<div class="content">
+				<div class="title">消灭黑块</div>
+				<div class="help">点击方块使其四周方块颜色改变，所有方块变为白色即胜利</div>
+				<div>
+					<li id="a1" onclick="onClick(this);"></li><li id="a2" onclick="onClick(this);"></li><li id="a3" onclick="onClick(this);"></li><li id="a4" onclick="onClick(this);"></li>
+				</div>
+				<div>
+					<li id="a5" onclick="onClick(this);"></li><li id="a6" onclick="onClick(this);"></li><li id="a7" onclick="onClick(this);"></li><li id="a8" onclick="onClick(this);"></li>
+				</div>
+				<div>
+					<li id="a9" onclick="onClick(this);"></li><li id="a10" onclick="onClick(this);"></li><li id="a11" onclick="onClick(this);"></li><li id="a12" onclick="onClick(this);"></li>
+				</div>
+				<div>
+					<li id="a13" onclick="onClick(this);"></li><li id="a14" onclick="onClick(this);"></li><li id="a15" onclick="onClick(this);"></li><li id="a16" onclick="onClick(this);"></li>
+				</div>
+			</div>
+	</div>
+</body>
+</html>

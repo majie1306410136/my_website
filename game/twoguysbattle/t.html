@@ -1,0 +1,592 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<Meta http-equiv="Content-Type" Content="text/html; Charset=utf-8">
+	<title>twoguysbattle</title>
+	<script type="text/javascript">
+		var mspeed=4;
+		var st_fall=0;
+		var st_create=0;
+		var kf_create=0;
+		var kf_dir=true;
+		var kf_time=100;
+		var left=false;
+		var right=false;
+		var b_left=false;
+		var b_right=false;
+		var jump=false;
+		var b_jump=false;
+		var gravity=1;
+		var r_dir=false;
+		var b_dir=false;
+		var kf_spd=8;
+		var r_energy=100;
+		var b_energy=100;
+		var r_use=false;
+		var b_use=false;
+		var r_show;
+		var b_show;
+		var av=0;
+		var b_av=0;
+		var t1;
+		var t2;
+		var kf;
+		var r_stuck=false;
+		var b_stuck=false;
+		var r_stucktime=0;
+		var b_stucktime=0;
+		var r_head;
+		var b_head;
+		var dive=false;
+		var b_dive=false;
+		var iscontrol=true;
+		var b_iscontrol=true;
+		var stone;
+		var startbtn;
+		function update(){
+			if(Deathcollision(t2,kf)){
+				alert('red win');
+				window.location.href='t.html';
+			}
+			if(Deathcollision(t1,kf)){
+				alert('blue win');
+				window.location.href='t.html';
+			}
+			if(Deathcollision(t2,stone)){
+				alert('red win');
+				window.location.href='t.html';
+			}
+			if(Deathcollision(t1,stone)){
+				alert('blue win');
+				window.location.href='t.html';	
+			}
+
+			if(Vcollision(t2,t1)){
+				b_av=8;
+				r_stuck=true;
+				av=0;
+			}
+			if(Vcollision(t1,t2)){
+				av=8;
+				b_stuck=true;
+				b_av=0;
+			}
+			if(r_stuck){
+				r_stucktime++;
+				iscontrol=false;
+				dive=true;
+				if(r_stucktime>20){
+					iscontrol=true;
+					dive=false;
+					r_stuck=false;
+					r_stucktime=0;
+				}
+			}
+			if(b_stuck){
+				b_stucktime++;
+				b_iscontrol=false;
+				b_dive=true;
+				if(b_stucktime>20){
+					b_iscontrol=true;
+					b_dive=false;
+					b_stuck=false;
+					b_stucktime=0;
+				}
+			}
+			r_show.style.width=r_energy+"px";
+			b_show.style.width=b_energy+"px";
+			r_show.style.left=100-r.offsetWidth+"px";
+			if(r_use){
+				r_energy-=0.5;
+				if(r_energy<0){
+					r_energy=0;
+					kf_spd=8;
+					r_use=false;
+				}
+			}else{
+				r_energy+=0.04;
+				if(r_energy>100)
+					r_energy=100;
+			}
+			if(b_use){
+				b_energy-=0.5;
+				if(b_energy<0){
+					b_energy=0;
+					kf_spd=8;
+					b_use=false;
+				}
+			}else{
+				b_energy+=0.04;
+				if(b_energy>100)
+					b_energy=100;
+			}
+			if(r_dir){
+				r_head.style.backgroundImage="url('head_r.png')";
+			}else{
+				r_head.style.backgroundImage="url('head_l.png')";
+			}
+			if(b_dir){
+				b_head.style.backgroundImage="url('bhead_r.png')";
+			}else{
+				b_head.style.backgroundImage="url('bhead_l.png')";
+			}
+			if(dive){
+				t1.style.height="25px";
+			}else{
+				t1.style.height="40px";
+			}
+			if(b_dive){
+				t2.style.height="25px";
+			}else{
+				t2.style.height="40px";
+			}
+			if(iscontrol){
+				if(right){
+					var b=t1.offsetLeft;
+					if(b<464){
+						b=b+mspeed;
+						b=b+"px";
+						t1.style.left=b;
+						if(Hcollision(t1,t2)){
+							t1.style.left=parseInt(b)-mspeed+"px";
+						}
+					}
+				}
+				if(left){
+					var d=t1.offsetLeft;
+					if(d>0){
+						d=d-mspeed;
+						d=d+"px";
+						t1.style.left=d;
+						if(Hcollision(t1,t2)){
+							t1.style.left=parseInt(d)+mspeed+"px";
+						}
+					}
+				}
+			}
+			if(b_iscontrol){
+				if(b_right){
+					var l=t2.offsetLeft;
+					if(l<464){
+						l=l+mspeed;
+						l=l+"px";
+						t2.style.left=l;
+						if(Hcollision(t1,t2)){
+							t2.style.left=parseInt(l)-mspeed+"px";
+						}
+					}
+				}
+				if(b_left){
+					var m=t2.offsetLeft;
+					if(m>0){
+						m=m-mspeed;
+						m=m+"px";
+						t2.style.left=m;
+						if(Hcollision(t1,t2)){
+							t2.style.left=parseInt(m)+mspeed+"px";
+						}
+					}
+				}
+			}
+			var a=t1.style.bottom;
+			a=parseInt(a);
+			if(a>0){
+				a=a+av;
+				av=av-gravity;
+				a=a+"px";
+				t1.style.bottom=a;
+			}else{
+				av=0;
+				jump=false;
+				t1.style.bottom="0px";
+			}
+			var t=t2.style.bottom;
+			t=parseInt(t);
+			if(t>0){
+				t=t+b_av;
+				b_av=b_av-gravity;
+				t=t+"px";
+				t2.style.bottom=t;
+			}else{
+				b_av=0;
+				b_jump=false;
+				t2.style.bottom="0px";
+			}
+			var ics=kf.offsetLeft;
+			if(ics>0&&ics<480){
+				if(kf_dir){
+					ics=ics-kf_spd;
+				}else{
+					ics=ics+kf_spd;
+				}
+				ics=ics+"px";
+				kf.style.left=ics;
+			}else{
+				kf_create++;
+				kf.style.display="none";
+				if(kf_create>kf_time){
+					kf.style.display="block";
+					var ran=Math.random()*2;
+					if(ran>=1){
+						kf.style.left="479px";
+						kf_dir=true;
+						kf.style.backgroundImage="url('kf.png')";
+					}else{
+						kf.style.left="1px";
+						kf_dir=false;
+						kf.style.backgroundImage="url('kf_r.png')";
+					}
+					kf_create=0;
+					kf_time=Math.random()*100+50;
+				}
+			}
+
+			var st=parseInt(stone.style.bottom);
+			if(st>0){
+				st=st-st_fall;
+				st_fall=st_fall+0.5;
+				st=st+"px";
+				stone.style.bottom=st;
+			}else{
+				stone.style.display="none";
+				st_create++;
+				if(st_create>50){
+					stone.style.display="block";
+					stone.style.left=Math.random()*400+50+"px";
+					stone.style.bottom="300px";
+					st_fall=0;
+					st_create=0;
+				}
+			}
+		}
+		function load(){
+			t1=document.getElementById('t1');
+			t2=document.getElementById('t2');
+			r_show=document.getElementById('r');
+			b_show=document.getElementById('b');
+			kf=document.getElementById('kf');
+			r_head=document.getElementById('r_head');
+			b_head=document.getElementById('b_head');
+			stone=document.getElementById('stone');
+			startbtn=document.getElementById('start');
+		}
+		function startb(){
+			start.style.display="none";
+			setInterval(update,20);
+		}
+		document.onkeydown=function(event){
+			var e=event || window.event || arguments.caller.arguments[0];
+			if(e&&e.keyCode==37){
+				left=true;
+				r_dir=false;
+			}
+			if(e&&e.keyCode==38){
+				if(jump==false&&iscontrol==true){
+					jump=true;
+					t1.style.bottom="1px";
+					av=12;
+				}
+			}
+			if(e&&e.keyCode==39){
+				right=true;
+				r_dir=true;
+			}
+			if(e&&e.keyCode==40){
+				dive=true;
+				iscontrol=false;
+			}
+			if(e&&e.keyCode==96){
+				if(r_energy>0){
+					kf_spd=3;
+					r_use=true;
+				}
+			}
+			if(e&&e.keyCode==65){
+				b_left=true;
+				b_dir=false;
+			}
+			if(e&&e.keyCode==87){
+				if(b_jump==false&&b_iscontrol==true){
+					b_jump=true;
+					t2.style.bottom="1px";
+					b_av=12;
+				}
+			}
+			if(e&&e.keyCode==68){
+				b_right=true;
+				b_dir=true;
+			}
+			if(e&&e.keyCode==83){
+				b_dive=true;
+				b_iscontrol=false;
+			}
+			if(e&&e.keyCode==70){
+				if(b_energy>0){
+					kf_spd=3;
+					b_use=true;
+				}
+			}
+		}
+		document.onkeyup=function(event){
+			var e=event || window.event || arguments.caller.arguments[0];
+			if(e&&e.keyCode==37){
+				left=false;
+			}
+			if(e&&e.keyCode==39){
+				right=false;
+			}
+			if(e&&e.keyCode==40){
+				dive=false;
+				iscontrol=true;
+			}
+			if(e&&e.keyCode==96){
+				kf_spd=8;
+				r_use=false;
+			}
+
+			if(e&&e.keyCode==65){
+				b_left=false;
+			}
+			if(e&&e.keyCode==68){
+				b_right=false;
+			}
+			if(e&&e.keyCode==83){
+				b_dive=false;
+				b_iscontrol=true;
+			}
+			if(e&&e.keyCode==70){
+				kf_spd=8;
+				b_use=false;
+			}
+		}
+
+
+
+		function Vcollision(target1,target2){
+			if(target1.offsetLeft<=target2.offsetLeft){
+				if(target2.offsetLeft-target1.offsetLeft+target2.offsetWidth<target1.offsetWidth+target2.offsetWidth){
+					if(parseInt(target1.style.bottom)<=target2.offsetHeight+parseInt(target2.style.bottom)&&parseInt(target1.style.bottom)>parseInt(target2.style.bottom)){
+						return true;
+					}else
+						return false;
+				}
+			}else{
+				if(target1.offsetLeft-target2.offsetLeft+target1.offsetWidth<target2.offsetWidth+target1.offsetWidth){
+					if(parseInt(target1.style.bottom)<=target2.offsetHeight+parseInt(target2.style.bottom)&&parseInt(target1.style.bottom)>parseInt(target2.style.bottom)){
+						return true;
+					}else
+						return false;
+				}
+			}
+		}
+
+		function Hcollision(target1,target2){
+			if(target1.offsetLeft<=target2.offsetLeft){
+				if(target2.offsetLeft-target1.offsetLeft+target2.offsetWidth<=target1.offsetWidth+target2.offsetWidth){
+					if(parseInt(target1.style.bottom)>target2.offsetHeight+parseInt(target2.style.bottom)){
+						return false;
+					}else if(parseInt(target2.style.bottom)>target1.offsetHeight+parseInt(target1.style.bottom)){
+						return false;
+					}else{
+						return true;
+					}
+				}else{
+					return false;
+				}
+			}else if(target2.offsetLeft<target1.offsetLeft){
+				if(target1.offsetLeft-target2.offsetLeft+target1.offsetWidth<=target2.offsetWidth+target1.offsetWidth){
+					if(parseInt(target1.style.bottom)>target2.offsetHeight+parseInt(target2.style.bottom)){
+						return false;
+					}else if(parseInt(target2.style.bottom)>target1.offsetHeight+parseInt(target1.style.bottom)){
+						return false;
+					}else
+						return true;
+				}else{
+					return false;
+				}
+			}
+		}
+
+		function Deathcollision(target1,target2){
+			var h1,h2,w1,w2,l1,l2,b1,b2;
+			h1=target1.offsetHeight;
+			h2=target2.offsetHeight;
+			w1=target1.offsetWidth;
+			w2=target2.offsetWidth;
+			l1=target1.offsetLeft;
+			l2=target2.offsetLeft;
+			b1=parseInt(target1.style.bottom);
+			b2=290-target2.offsetTop;
+
+			if(l1<l2){
+				if(l2-l1+w2<w1+w2){
+					if(b1<b2){
+						if(b2-b1+h2<h1+h2){
+							return true;
+						}
+					}else{
+						if(b1-b2+h1<h1+h2){
+							return true;
+						}
+					}
+				}
+			}else{
+				if(l1-l2+w1<w1+w2){
+					if(b1<b2){
+						if(b2-b1+h2<h1+h2){
+							return true;
+						}
+					}else{
+						if(b1-b2+h1<h1+h2){
+							return true;
+						}
+					}
+				}
+			}
+		}
+	</script>
+	<style type="text/css">
+		.container{
+			width: 500px;
+			height: 400px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		#win{
+			width: 500px;
+			height: 300px;
+			border: 4px double black;
+			position: absolute;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		#t1{
+			width: 30px;
+			height: 40px;
+			position: absolute;
+			bottom: 0px;
+			left: 400px;
+		}
+		#r_head{
+			width: 30px;
+			height: 10px;
+			position: absolute;
+			z-index: 2;
+			background-image: url("head_l.png");
+		}
+		#r_body{
+			width: 30px;
+			height: 20px;
+			position: absolute;
+			bottom: 0px;
+			background-image: url("body.png");
+		}
+		#t2{
+			width: 30px;
+			height: 40px;
+			position: absolute;
+			bottom: 0px;
+			left: 100px;
+		}
+		#b_head{
+			width: 30px;
+			height: 10px;
+			position: absolute;
+			z-index: 2;
+			background-image: url("bhead_r.png");
+		}
+		#b_body{
+			width: 30px;
+			height: 20px;
+			position: absolute;
+			bottom: 0px;
+			background-image: url("bbody.png");
+		}
+		#kf{
+			width: 20px;
+			height: 10px;
+			background-image: url("kf.png");
+			position: absolute;
+			bottom: 30px;
+			left: 480px;
+		}
+		#red{
+			width: 100px;
+			height: 20px;
+			position: absolute;
+			top: 5px;
+			left: 395px;
+			border: 1px solid black;
+		}
+		#r{
+			width: 100px;
+			height: 20px;
+			position: absolute;
+			left: 0px;
+			background-color: red;
+		}
+		#blue{
+			width: 100px;
+			height: 20px;
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			border: 1px solid black;
+		}
+		#b{
+			width: 100px;
+			height: 20px;
+			position: absolute;
+			left: 0px;
+			background-color: blue;
+		}
+		#stone{
+			width: 8px;
+			height: 8px;
+			position: absolute;
+			bottom: 300px;
+			left: 100px;
+			background-image: url('stone.png');
+			z-index: 3;
+		}
+		#tips{
+			width: 700px;
+			text-align: left;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		#start{
+			position: absolute;
+			left: 200px;
+			bottom: 100px;
+		}
+	</style>
+</head>
+<body onload="load();">
+	<div class="container">
+		<center><h1>双人争霸</h1></center>
+		<div id="win">
+			<div id="red">
+				<div id="r"></div>
+			</div>
+			<div id="blue">
+				<div id="b"></div>
+			</div>
+			<div id="t2">
+				<div id="b_head"></div>
+				<div id="b_body"></div>
+			</div>
+			<div id="start">
+				<input type="button" onclick="startb();" value="开始" style="width: 140px;height: 70px;">
+			</div>
+			<div id="t1">
+				<div id="r_head"></div>
+				<div id="r_body"></div>
+			</div>
+			<div id="kf"></div>
+			<div id="stone"></div>
+		</div>
+	</div>
+		<div id="tips">操作说明：蓝色方操作为WASD+F，红色方为方向键+小键盘0键，F和0键可以使飞刀的速度变慢，但会使用能量，能量用完就不能使用该能力。<br/>游戏说明：控制角色比对方角色存活时间久即可获胜，踩到别人的头可以使其晕眩一段时间,并且眩晕结束后会强制站起。</div>
+</body>
+</html>

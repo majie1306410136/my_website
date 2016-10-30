@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>2048</title>
+	<meta name="viewport" content="width=device-width" />
+	<script type="text/javascript">
+		var bool="false";
+		var all=new Array(16);
+		var num=new Array(16);
+		var bg;
+		function load(){
+			bg=document.getElementById('bg');
+			for(var i=1;i<17;i++){
+				var b="a"+i;
+				all[i-1]=document.getElementById(b);
+				var tp=6+parseInt((i-1)/4)*106+"px";
+				var lf=6+parseInt((i-1)%4)*106+"px";
+				all[i-1].style.top=tp;
+				all[i-1].style.left=lf;
+				num[i-1]=0;
+			}
+			setnum();
+			setnum();
+		}
+		function reset(){
+			for(var i=0;i<16;i++){
+				all[i].style.backgroundImage="url('blank.png')";
+				num[i]=0;
+			}
+			setnum();
+			setnum();
+		}
+		function setnum(){
+			var ran=Math.random()*16;
+			ran=parseInt(ran);
+			if(num[ran]!=0){
+				setnum();
+			}else{
+				var aaa=Math.random()*10;
+				if(aaa>1){
+					all[ran].style.backgroundImage="url('2.png')";
+					num[ran]=2;
+				}else{
+					all[ran].style.backgroundImage="url('4.png')";
+					num[ran]=4;
+				}
+			}
+		}
+		function setpic(){
+			for(var h=0;h<4;h++){
+					for(var k=0;k<4;k++){
+						switch(num[h*4+k]){
+							case 0:all[h*4+k].style.backgroundImage="url('blank.png')";break;
+							case 2:all[h*4+k].style.backgroundImage="url('2.png')";break;
+							case 4:all[h*4+k].style.backgroundImage="url('4.png')";break;
+							case 8:all[h*4+k].style.backgroundImage="url('8.png')";break;
+							case 16:all[h*4+k].style.backgroundImage="url('16.png')";break;
+							case 32:all[h*4+k].style.backgroundImage="url('32.png')";break;
+							case 64:all[h*4+k].style.backgroundImage="url('64.png')";break;
+							case 128:all[h*4+k].style.backgroundImage="url('128.png')";break;
+							case 256:all[h*4+k].style.backgroundImage="url('256.png')";break;
+							case 512:all[h*4+k].style.backgroundImage="url('512.png')";break;
+							case 1024:all[h*4+k].style.backgroundImage="url('1024.png')";break;
+							case 2048:all[h*4+k].style.backgroundImage="url('2048.png')";break;
+						}
+					}
+				}
+		}
+		document.onkeydown=function(event){
+			var e=event || window.event || arguments.caller.arguments[0];
+			if(e&&e.keyCode==37){
+				for(var i=0;i<4;i++){
+					for(var j=0;j<4;j++){
+						var pos=i*4+j;
+						if(num[pos]!=0){
+							while(pos%4!=0){
+								if(num[pos-1]==num[pos]||num[pos-1]==0){
+									if(num[pos]!=0){
+										num[pos-1]=num[pos-1]+num[pos];
+										num[pos]=0;
+										setpic();
+										bool="true";
+									}
+								}
+								pos--;
+							}
+						}
+					}
+				}
+				if(bool=="true"){
+					bool=false;
+					setnum();
+				}
+			}
+			if(e&&e.keyCode==38){
+				for(var i=0;i<4;i++){
+					for(var j=0;j<4;j++){
+						var pos=i*4+j;
+						if(num[pos]!=0){
+							while(pos>3){
+								if(num[pos-4]==num[pos]||num[pos-4]==0){
+									if(num[pos]!=0){
+										num[pos-4]=num[pos-4]+num[pos];
+										num[pos]=0;
+										bool="true";
+									}
+								}
+								pos--;
+							}
+						}
+					}
+				}
+				if(bool=="true"){
+					setnum();
+					bool=false;
+				}
+				setpic();
+			}
+			if(e&&e.keyCode==39){
+				for(var i=3;i>=0;i--){
+					for(var j=3;j>=0;j--){
+						var pos=i*4+j;
+						if(num[pos]!=0){
+							while((pos+1)%4!=0){
+								if(num[pos+1]==num[pos]||num[pos+1]==0){
+									if(num[pos]!=0){
+										num[pos+1]=num[pos+1]+num[pos];
+										num[pos]=0;
+										bool="true";
+									}
+								}
+								pos++;
+							}
+						}
+					}
+				}
+				if(bool=="true"){
+					setnum();
+					bool=false;
+				}
+				setpic();
+			}
+			if(e&&e.keyCode==40){
+				for(var i=3;i>=0;i--){
+					for(var j=3;j>=0;j--){
+						var pos=i*4+j;
+						if(num[pos]!=0){
+							while(pos<12){
+								if(num[pos+4]==num[pos]||num[pos+4]==0){
+									if(num[pos]!=0){
+										num[pos+4]=num[pos+4]+num[pos];
+										num[pos]=0;
+										bool="true";
+									}
+								}
+								pos++;
+							}
+						}
+					}
+				}
+				if(bool=="true"){
+					setnum();
+					bool=false;
+				}
+				setpic();
+			}
+		}
+	</script>
+	<style type="text/css">
+	#bg{
+		position: absolute;
+		top:10%;
+		left:30%;
+		background-image: url("bg.png");
+		width:438px;
+		height: 438px;
+
+	}
+	.cube{
+		background-image: url("blank.png");
+		position: absolute;
+		float:left;
+		margin: 4px;
+		width: 100px;
+		height: 100px;
+	}
+	</style>
+</head>
+<body onload="load();">
+<div id="container">
+	<div id="bg">
+		<div id="a1" class="cube"></div>
+		<div id="a2" class="cube"></div>
+		<div id="a3" class="cube"></div>
+		<div id="a4" class="cube"></div>
+		<div id="a5" class="cube"></div>
+		<div id="a6" class="cube"></div>
+		<div id="a7" class="cube"></div>
+		<div id="a8" class="cube"></div>
+		<div id="a9" class="cube"></div>
+		<div id="a10" class="cube"></div>
+		<div id="a11" class="cube"></div>
+		<div id="a12" class="cube"></div>
+		<div id="a13" class="cube"></div>
+		<div id="a14" class="cube"></div>
+		<div id="a15" class="cube"></div>
+		<div id="a16" class="cube"></div>
+	</div>
+	<div>
+		<input type="button" value="reset" onclick="reset();" style="position: relative;left: 50%;bottom: 20%;"></input>
+	</div>
+</div>
+</body>
+</html>

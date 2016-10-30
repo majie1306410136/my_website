@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<Meta http-equiv="Content-Type" Content="text/html; Charset=utf-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>数字排序</title>
+	<script type="text/javascript">
+		var blank=15;
+		var all=new Array(16);
+		var time=0;
+		function load(){
+			for(var i=1;i<17;i++){
+				var b = "l"+i;
+				all[i-1]=document.getElementById(b);
+				all[i-1].style.backgroundImage = "url('bg.png')";
+			}
+			var num=new Array(15);
+			for(i=0;i<15;i++){
+				num[i]=15-i;
+			}
+			for(i=0;i<15;i++){
+				var r=parseInt(Math.random()*14);
+				var change=num[r];
+				num[r]=num[14-r];
+				num[14-r]=change;
+			}
+			for(i=0;i<15;i++){
+				all[i].innerHTML=num[i];
+			}
+			all[15].style.backgroundImage="";
+			setInterval(tick,1000);
+		}
+
+		function tick(){
+			time++;
+		}
+
+		function mv(a){
+			var cg=all[a].innerHTML;
+			all[a].innerHTML="";
+			all[a].style.backgroundImage="";
+			all[blank].innerHTML=cg;
+			all[blank].style.backgroundImage="url('bg.png')";
+			blank=a;
+		}
+
+		function win(){
+			var count=0;
+			for(var j=0;j<16;j++){
+				if(all[j].innerHTML==j+1){
+					count++;
+				}
+			}
+			if(count==15){
+				alert("你赢了,用时："+time+"秒");
+			}
+		}
+
+		function onClick(a){
+			var dd=a.id;
+			dd=dd.substr(1,2);
+			dd=dd-1;
+			var cy=parseInt(dd/4);
+			var cx=parseInt(dd%4);
+			var by=parseInt(blank/4);
+			var bx=parseInt(blank%4);
+			if(cy==by){
+				if(cx==bx-1||cx==bx+1){
+					mv(dd);
+				}
+			}else{
+				if(cx==bx){
+					if(cy==by-1||cy==by+1){
+						mv(dd);
+					}
+				}
+			}
+			win();
+		}
+
+		function ontouch(a){
+			var dd=a.id;
+			dd=dd.substr(1,2);
+			dd=dd-1;
+			var cy=parseInt(dd/4);
+			var cx=parseInt(dd%4);
+			var by=parseInt(blank/4);
+			var bx=parseInt(blank%4);
+			if(cy==by){
+				if(cx==bx-1||cx==bx+1){
+					mv(dd);
+				}
+			}else{
+				if(cx==bx){
+					if(cy==by-1||cy==by+1){
+						mv(dd);
+					}
+				}
+			}
+			win();
+			return;
+		}
+
+	</script>
+	<style type="text/css">
+	.container{
+		width: 100%;
+		text-align: center;
+	}
+	#sc{
+		width: 408px;
+		height: 408px;
+		margin-left: auto;
+		margin-right: auto;
+		border: 5px double black;
+	}
+	div li{
+		list-style-type: none;
+		width: 100px;
+		height: 100px;
+		margin: 1px 1px;
+		float: left;
+		text-align: center;
+		line-height: 100px;
+		font-size: 50px;
+	}
+	</style>
+</head>
+<body onload="load();">
+	<div class="container">
+		<h1>数字排序</h1>
+		<div id="sc">
+			<div>
+				<li id="l1" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l2" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l3" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l4" ontouchstart="ontouch(this);" onclick="onClick(this);"></li>
+			</div>
+			<div>
+				<li id="l5" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l6" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l7" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l8" ontouchstart="ontouch(this);" onclick="onClick(this);"></li>
+			</div>
+			<div>
+				<li id="l9" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l10" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l11" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l12" ontouchstart="ontouch(this);" onclick="onClick(this);"></li>
+			</div>
+			<div>
+				<li id="l13" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l14" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l15" ontouchstart="ontouch(this);" onclick="onClick(this);"></li><li id="l16" ontouchstart="ontouch(this);" onclick="onClick(this);"></li>
+			</div>
+		</div>
+		<br/>
+		<h3>说明:点击空白周围的数字来移动数字,将所有的数字按照从左到右从上到下的顺序排列成功即可完成游戏。</h3>
+	</div>
+</body>
+</html>

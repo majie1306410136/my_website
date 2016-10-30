@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Flappy bird</title>
+	<meta name="viewport" content="width=device-width" />
+	<style type="text/css">
+		body{
+			margin: 0;
+		}
+		.container{
+			width:290px;
+			margin: 0 auto;
+			z-index:1000;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<canvas id="mycanvas" width="288" height="512" style="border: 1px solid black;"></canvas>
+	</div>
+	<audio preload="auto" id="hit" src="resource/sfx_hit.ogg"></audio>
+	<audio preload="auto" id="point" src="resource/sfx_point.ogg"></audio>
+	<audio preload="auto" id="wing" src="resource/sfx_wing.ogg"></audio>
+	<script src="js/main.js"></script>
+</body>
+</html>

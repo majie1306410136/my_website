@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div{
+			margin: 0px;
+			padding: 0px;
+		}
+		html{
+			height: 100%;
+		}
+		body{
+			height: 100%;
+			margin: 0px;
+			padding: 0px;
+		}
+		#container{
+			width: 100%;
+			height: 100%;
+			position: relative;
+		}
+		.left{
+			width: 300px;
+			height: 100%;
+			border-width: 1px 1px 1px 0px;
+			border-style: solid;
+			border-color: #999999;
+			background-color:#6495ED;
+			position: fixed;
+			left: 0px;
+			top: 0px;
+		}
+		.dis{
+			margin-top: 15%;
+			font-style: Microsoft YaHei;
+			font-weight: bold;
+			font-size: 35px;
+			text-align: center;
+			color: #eaeaea;
+			cursor: pointer;
+		}
+		.button{
+			margin: 0 auto;
+			margin-top: 20%;
+			width: 150px;
+			height: 50px;
+			line-height: 50px;
+			transition: all 0.4s ease-in-out;
+			text-align: center;
+			color: white;
+			display: block;
+			cursor: pointer;
+		}
+		.button:after,.button:before{
+			border: 1px solid rgba(221,212,212,0);
+			box-sizing:border-box;
+			content:"";
+			margin:0 auto;
+			position: relative;
+			bottom: 0px;
+			display: block;
+			width: 0px;
+			transition: all 280ms ease-in-out;
+		}
+		.button:hover{
+			letter-spacing: 10px;
+			font-size: 20px;
+		}
+		.button:hover:after,.button:hover:before{
+			border: 1px solid rgba(221,212,212,1);
+			width: 100%;
+		}
+		.show{
+			margin-left: 301px;
+			height: 100%;
+		}
+		#pas{
+			text-align: center;
+			margin-top: 300px;
+		}
+		#tip{
+			color: red;
+		}
+		#tb{
+			padding: 30px;
+			text-align: center;
+		}
+		tr,td{
+			border: 1px solid #aaaaaa;
+		}
+		td{
+			padding: 10px 5px;
+		}
+		.datashow{
+			border-collapse: collapse;
+			font-family: Microsoft YaHei;
+			font-weight: bold;
+			font-size: 14px;
+		}
+		#alert_container{
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			left: 0px;
+			top: 0px;
+			background-color: rgba(100,100,100,0.5);
+			display: none;
+		}
+		.alert{
+			position: absolute;
+			left: 20%;
+			top: 20%;
+			width: 60%;
+			height: 300px;
+			border: 1px solid red;
+			background-color: #eeeeee;
+		}
+		#insert_container{
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			left: 0px;
+			top: 0px;
+			background-color: rgba(100,100,100,0.5);
+			display: none;
+		}
+		#insert_container form{
+			position: absolute;
+			left: 20%;
+			top: 10%;
+			width: 60%;
+			padding: 20px;
+			border: 1px solid #aaaaaa;
+			background-color: #eeeeee;
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<div class="left">
+			<div class="dis">网站后台管理</div>
+			<div class="button" onclick="change(0);">例子</div>
+			<div class="button" onclick="change(1);">留言</div>
+			<div class="button" onclick="change(2);if(show)insert_container.style.display='block';">添加例子</div>
+		</div>
+		<div class="show">
+			<div id="pas">
+					请输入密码：<input type="password" id="psd"><input onclick="login();" type="button" value="登陆">
+				<div id="tip"></div>
+			</div>
+			<div id="tb"></div>
+		</div>
+	</div>
+	<div id="alert_container">
+		<div class="alert">
+			<table style="width: 100%">
+				<tr><td>标题</td><td><input id="alert_title" type="text" value=""></td></tr>
+				<tr><td>时间</td><td><input id="alert_time" type="text" value=""></td></tr>
+				<tr><td>内容</td><td><textarea id="alert_content" style="display: inline-table;width: 90%" cols="30" rows="8"></textarea></td></tr>
+				<tr><td>地址</td><td><input id="alert_address" type="text">   <input type="button" value="更改" onclick="alert_update();"></td></tr>
+			</table>
+		</div>
+	</div>
+	<div id="insert_container">
+		<form action="insert.php" method="post" enctype="multipart/form-data">
+			<table style="width: 100%">
+				<tr><td>标题</td><td><input type="text" name="title" id="insert_title" required="required">*必填</td></tr>
+				<tr><td>类型</td><td><select name="type" id="insert_title">
+					<option value="effect" selected="selected">effect</option>
+					<option value="game">game</option>
+					<option value="other">other</option>
+				</select></td></tr>
+				<tr><td>内容</td><td><textarea name="content" style="display: inline-table;width: 80%" id="insert_content" cols="30" rows="10" required="required"></textarea>*必填</td></tr>
+				<tr><td>文件</td><td><input type="file" accept="text/html" name="myfile" id="myfile"></td></tr>
+				<tr><td>按钮文本</td><td><input name="btntxt" type="text" value="点击进入" required="required">*必填</td></tr>
+				<tr><td></td><td><input type="reset" value="取消" onclick="insert_container.style.display='none';"> <input type="submit" value="确定"></td></tr>
+			</table>
+		</form>
+	</div>
+</body>
+<script>
+	var index=0,show=false;
+	psd.addEventListener("keydown",function(event){
+		if(event.keyCode==13){
+			login();
+		}
+	});
+	function change(a){
+		if(show){
+			index=a;
+			setData();
+		}else{
+			tip.innerText="请输入密码";
+		}
+	}
+	if (window.XMLHttpRequest){
+		xmlhttp=new XMLHttpRequest();
+	}
+	else{
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	function login(){
+		xmlhttp.open("GET","check.php?pwd="+psd.value,false);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.response;
+		if(xmlDoc){
+			setData();
+			show=true;
+		}else{
+			tip.innerText="密码错误";
+		}
+	}
+	function setData(){
+		var inHTML;
+		if(index==0){
+			xmlhttp.open("GET","content.xml",false);
+			inHtml="<h1>例子</h1>";
+			xmlhttp.send();
+			xmlDoc=xmlhttp.responseXML;
+			inHtml+="<table class='datashow'><tr style='background-color:#121212;color:#fff;'><td width='100px'>标题</td><td width='100px'>时间</td><td width='450px'>内容</td><td width='200px'>地址</td><td width='50px'>操作</td></tr>";
+			for(var i=0;i<xmlDoc.getElementsByTagName('example').length;i++){
+				inHtml+="<tr>";
+				inHtml+="<td>";
+				inHtml+=xmlDoc.getElementsByTagName('example')[i].getElementsByTagName("title")[0].textContent;
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+=xmlDoc.getElementsByTagName('example')[i].getElementsByTagName("time")[0].textContent;
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+=xmlDoc.getElementsByTagName('example')[i].getElementsByTagName("content")[0].textContent;
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+="<a target='_blank' href='"+xmlDoc.getElementsByTagName('example')[i].getElementsByTagName("href")[0].textContent+"'>"+xmlDoc.getElementsByTagName('example')[i].getElementsByTagName("href")[0].textContent+"</a>";
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+="<button id='lzu"+i+"' onclick='set(this);'>修改</button><button id='lzd"+i+"' onclick='set(this);'>删除</button>";
+				inHtml+="</td>";
+				inHtml+="</tr>";
+			}
+			tb.innerHTML=inHtml;
+			inHtml+="</table>";
+		}else if(index==1){
+			xmlhttp.open("GET","reply.xml",false);
+			inHtml="<h1>留言</h1>";
+			xmlhttp.send();
+			xmlDoc=xmlhttp.responseXML;
+			inHtml+="<table class='datashow'><tr style='background-color:#121212;color:#fff;'><td width='100px'>编号</td><td width='100px'>用户名</td><td width='100px'>时间</td><td width='450px'>内容</td><td width='100px'>背景图片</td><td width='50px'>操作</td></tr>";
+			for(var i=0;i<xmlDoc.getElementsByTagName('comment').length;i++){
+				inHtml+="<tr>";
+				inHtml+="<td>";
+				inHtml+=xmlDoc.getElementsByTagName('comment')[i].getElementsByTagName("id")[0].textContent;
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+=xmlDoc.getElementsByTagName('comment')[i].getElementsByTagName("user")[0].textContent;
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+=xmlDoc.getElementsByTagName('comment')[i].getElementsByTagName("date")[0].textContent;
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+=xmlDoc.getElementsByTagName('comment')[i].getElementsByTagName("content")[0].textContent;
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+="<img src='"+xmlDoc.getElementsByTagName('comment')[i].getElementsByTagName("bg")[0].textContent+"'/>";
+				inHtml+="</td>";
+				inHtml+="<td>";
+				inHtml+="<button id='lyd"+i+"'onclick='set(this);'>删除</button>";
+				inHtml+="</td>";
+				inHtml+="</tr>";
+			}
+			tb.innerHTML=inHtml;
+			inHtml+="</table>";
+		}else if(index==2){
+
+		}
+		pas.style.display="none";
+	}
+	var dt_string;
+	function set(dom){
+		var type=dom.id.substr(2,1),
+			name=dom.id.substr(0,2);
+		dt_string=dom.parentNode.parentNode.children[0].innerText;
+		if(type=="u"){
+			XMLupdate(dom.parentNode.parentNode);
+		}else if(type=="d"){
+			if(confirm("确定删除？删除后不可恢复"))
+				XMLdelete(name,dom.id.substr(3,1));
+		}
+	}
+
+	function XMLupdate(dom){
+		alert_container.style.display="block";
+		alert_title.value=dom.children[0].innerText;
+		alert_time.value=dom.children[1].innerText;
+		alert_content.value=dom.children[2].innerText;
+		alert_address.value=dom.children[3].innerText;
+	}
+	function XMLdelete(name,id){
+		xmlhttp.open("GET","delete.php?s="+dt_string+"&name="+name+"&id="+id,false);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.response;
+		alert("删除成功");
+		setTimeout(setData,300);
+	}
+	function alert_update(){
+		var txt="s="+dt_string+"&title="+alert_title.value+"&time="+alert_time.value+"&content="+alert_content.value+"&address="+alert_address.value;
+		xmlhttp.open("POST","update.php",false);
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xmlhttp.send(txt);
+		xmlDoc=xmlhttp.response;
+		alert("更改完成");
+		setTimeout(setData,300);
+		alert_container.style.display="none";
+	}
+</script>
+</html>

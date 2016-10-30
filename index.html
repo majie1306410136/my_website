@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>Dq-lab</title>
+	<link rel="stylesheet" href="css/base.css">
+	<link rel=”shortcut” href=”/favicon.ico” />
+</head>
+<body>
+	<!--[if lte IE 9]>
+	<p class="tips">您当前的浏览器版本过低，请升级到 IE10 或者谷歌浏览器再进行浏览。</p>
+	<![endif]-->
+	<div class="header">
+		<a href="#">
+			<canvas id="logo" height="120"></canvas>
+		</a>
+	</div>
+	<div class="container">
+		<ul class="search">
+			<li name="btn" class="button select" onclick="clk(this,0)">效果</li>
+			<li name="btn" class="button" onclick="clk(this,1)">游戏</li>
+			<li name="btn" class="button" onclick="clk(this,2)">其它</li>
+			<li name="btn" class="button" onclick="clk(this,3)">留言</li>
+		</ul>
+		<div id="effect"></div>
+		<div id="game"></div>
+		<div id="other"></div>
+		<div id="comment">
+			<div id="sw"></div>
+			<div class="reply">
+				<table cellspacing="0" cellpadding="0" class="tb" onchange="setyl();">
+					<tr>
+						<td >昵称:</td>
+						<td>
+							<input type="text" id="y_nc" maxlength="8" placeholder="输入显示的昵称"></td>
+					</tr>
+					<tr>
+						<td>留言:</td>
+						<td>
+							<textarea name="" id="y_rpl" cols="30" rows="5" placeholder="输入留言信息,不超过150个字符,一个汉字为两个字符"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>选择字体颜色:</td>
+						<td>
+							<input type="color" id="y_color"  value="#000000"></td>
+					</tr>
+					<tr>
+						<td>请选择背景</td>
+						<td>
+							<select style="float: left;" name="bg" id="y_bg">
+								<option value="resource/ct1.gif">1</option>
+								<option value="resource/ct2.gif">2</option>
+								<option value="resource/ct3.gif">3</option>
+								<option value="resource/ct4.gif">4</option>
+								<option value="resource/ct5.gif">5</option>
+								<option value="resource/ct6.gif">6</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>预览</td>
+						<td>
+							<div id="yl" style="float:left;margin-left: 10px;margin-top: 10px;" >
+								<div class="message">
+									<textarea class="content" readonly="readonly"></textarea>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<a id="a3" onclick="upload();">发布</a>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+		</div>
+		<div id="dis">
+			<div id="scrn"></div>
+		</div>
+	</div>
+	<div class="footer">版权所有©</div>
+</body>
+	<script src="js/logo.js"></script>
+	<script src="js/main.js"></script>
+</html>

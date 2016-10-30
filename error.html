@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>404 Not Found</title>
+	<style>
+		@font-face{
+			font-family:fzzj;
+			src:url("resource/fzzj-ttybfont.ttf");
+		}
+		body{
+			font-family:fzzj;
+			font-size:30px;
+			margin:0;
+			padding: 20px 10px;
+		}
+		.container{
+			padding: 20px;
+			text-align:center;
+		}
+		.container p{
+			font-family:fzzj;
+			font-weight:bold;
+			font-size:40px;
+		}
+		.container a{
+			text-decoration:none;
+		}
+		hr{
+			margin-top:-50px;
+		}
+		.header{
+			height: 50px;
+			width: 100%;
+			left: 0px;
+			top: 0px;
+			background-color: #515151;
+			position: fixed;
+			z-index: 10;
+		}
+		#logo{
+			margin-left: 10%;
+			width: 150px;
+			height: 50px;
+		}
+		#time{
+			color:#ff6666;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<a href="#"><canvas id="logo" height="120"></canvas></a>
+	</div>
+	<div class="container">
+		<h1>404 Not Found</h1>
+		<hr>
+		<h4>抱歉，我们找不到此页面~</h4>
+		<p>The page can not be viewed or does not exist<br/>
+		Wrong address entered<br/>
+		Page redefinition or program error</p>
+		<p>可能是地址输入错误，或者是页面已经删除。</p>
+		<p>系统将在<span id="time">5</span>秒后返回，或者<a href="index.html">返回主页</a></p>
+	</div>
+</body>
+<script src="js/logo.js"></script>
+<script>
+	(function(){
+		var count=5;
+		setInterval(function(){count--;time.innerText=count;if(count<0){window.history.go(-1);window.location.href="index.html"}},1000);
+	})();
+</script>
+</html>

@@ -1,0 +1,48 @@
+<meta charset="utf-8">
+<?php
+	$xmlpatch="reply.xml";
+
+	$doc=new DOMDocument('1.0','utf-8');
+	$doc->formatOutput=true;
+	$doc->load($xmlpatch);
+	$rpls=$doc->getElementsByTagName("comment");
+	$length=$rpls->length;
+	$comment=$doc->createElement('comment');
+	$id=$doc->createElement('id');
+	$id1=$doc->createTextNode(($doc->getElementsByTagName('comment')->item($length-1)->getElementsByTagName("id")->item(0)->nodeValue+1));
+	$id->appendChild($id1);
+	$user=$doc->createElement('user');
+	$user1=$doc->createTextNode($_POST['user']);
+	$user->appendChild($user1);
+	$content=$doc->createElement('content');
+	$content1=$doc->createTextNode($_POST['content']);
+	$content->appendChild($content1);
+	$date=$doc->createElement('date');
+	$time=time();
+	$date1=$doc->createTextNode("20".date("y.m.d",$time));
+	$date->appendChild($date1);
+	$color=$doc->createElement('color');
+	$color1=$doc->createTextNode($_POST['color']);
+	$color->appendChild($color1);
+	$bg=$doc->createElement('bg');
+	$bg1=$doc->createTextNode($_POST['bg']);
+	$bg->appendChild($bg1);
+	$left=$doc->createElement('left');
+	$left1=$doc->createTextNode($_POST['left']);
+	$left->appendChild($left1);
+	$top=$doc->createElement('top');
+	$top1=$doc->createTextNode($_POST['top']);
+	$top->appendChild($top1);
+	$comment->appendChild($id);
+	$comment->appendChild($user);
+	$comment->appendChild($content);
+	$comment->appendChild($date);
+	$comment->appendChild($color);
+	$comment->appendChild($bg);
+	$comment->appendChild($left);
+	$comment->appendChild($top);
+	$reply=$doc->getElementsByTagName('reply');
+	$reply=$reply->item(0);
+	$reply->appendChild($comment);
+	$doc->save($xmlpatch);
+?>

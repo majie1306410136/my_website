@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article>
+	<example type="effect">
+		<title>拖动DIV</title>
+		<time>2015-05-16</time>
+		<content>简单实例：这个实例可以拖拽DIV移动,用于网站自定义布局</content>
+		<href>effect/a1.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>随机点线</title>
+		<time>2015-09-03</time>
+		<content>效果实例：可以当做网站的背景，根据点的随机移动来连线，改进后应该可以用来显示字符</content>
+		<href>effect/a2.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>鼠标特效(球)</title>
+		<time>2015-09-25</time>
+		<content>效果实例：可以当做网站的背景，从鼠标位置不断生成彩色球体，点击鼠标可以加速生成</content>
+		<href>effect/a3.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>鼠标特效(方框)</title>
+		<time>2015-09-27</time>
+		<content>效果实例：可以当做网站的背景，从鼠标位置不断生成彩色方框，点击鼠标可以一次性生成大量方框。在球的基础上增加了旋转</content>
+		<href>effect/a4.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>沙画特效(渐显)</title>
+		<time>2016-04-11</time>
+		<content>效果实例：可以将图片处理后的数据放入，也可以用字，鼠标移动到区域内会生成小点来显示原始图片或字符</content>
+		<href>effect/a5.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>沙画特效(打乱)</title>
+		<time>2016-04-15</time>
+		<content>效果实例：可以将图片处理后的数据放入，也可以用字，可以用鼠标将显示的原图或字符打乱，过一段时间然后恢复</content>
+		<href>effect/a6.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>3D效果(未完成)</title>
+		<time>2016-05-06</time>
+		<content>效果实例：把3D坐标转换为2D坐标并在屏幕上显示，可以代码里添加各种形状的几何体</content>
+		<href>effect/a7.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>表白动画</title>
+		<time>2016-05-18</time>
+		<content>效果实例：修改内容后可用来表白，程序员表白神技，做完手机兼容后可以用手机打开</content>
+		<href>effect/a8.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>烟花</title>
+		<time>2016-10-05</time>
+		<content>效果实例：根据网上看到的效果做出的模拟烟花实例，待优化</content>
+		<href>effect/yh/index.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>六边形效果</title>
+		<time>2016-10-05</time>
+		<content>效果实例：根据网上看到的效果做出的一个特效</content>
+		<href>effect/a9.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="effect">
+		<title>彩色雨滴效果</title>
+		<time>2016-10-12</time>
+		<content>效果实例：根据网上看到的效果做出的一个特效</content>
+		<href>effect/a11.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>恶作剧小游戏</title>
+		<time>2015-05-18</time>
+		<content>一个点击按钮的恶作剧小游戏，鼠标移进按钮按钮就会移动</content>
+		<href>game/a1.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>ClG</title>
+		<time>2015-05-26</time>
+		<content>一个点击方块变色游戏，点击一个方块四周方块全部变反色，全部变成白色获胜</content>
+		<href>game/ClG/page.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>排序游戏</title>
+		<time>2015-06-02</time>
+		<content>一个排序游戏，点击空白周围的方块会使这块方块移动到空白处，按从左到右从上到下排出1-15即可胜利</content>
+		<href>game/paixu/px.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>2048</title>
+		<time>2015-06-14</time>
+		<content>2048游戏，没有方块移动的过度效果，和正版的2048有些规则区别</content>
+		<href>game/2048/2048.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>FlappyBird</title>
+		<time>2015-06-26</time>
+		<content>仿照FlappyBird制作的游戏，没有做分数板排行榜的功能，只是最基本的游戏流程</content>
+		<href>game/FlappyBird/page.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>二人战争</title>
+		<time>2015-07-05</time>
+		<content>在视频里看见别人在玩一个类似的游戏，就写来练练手，双人同机对战，击败对方即可获得胜利</content>
+		<href>game/twoguysbattle/t.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>俄罗斯方块</title>
+		<time>2015-09-18</time>
+		<content>学习canvas之后的作品，经典的俄罗斯方块，会随着分数的增加而加快方块下落速度</content>
+		<href>game/elsfk/index.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>贪吃蛇</title>
+		<time>2015-09-20</time>
+		<content>做完俄罗斯方块后的练手作品，有一个div的调速条，只有撞自己身体才会死</content>
+		<href>game/snake/index.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>扫雷</title>
+		<time>2016-06-16</time>
+		<content>模拟windows扫雷,基本功能都做到了除了第一下不可能点到雷,鼠标中键可以标记雷</content>
+		<href>game/a2.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="game">
+		<title>猫猫竞速</title>
+		<time>2016-07-18</time>
+		<content>模仿一个独立游戏工作室的网络游戏作为期末考试项目，多人在线，使用nodejs为服务器，不过有些卡卡的。详情见&lt;a href="http://tieba.baidu.com/p/4637328411" target="_blank"&gt;贴吧&lt;/a&gt;</content>
+		<href>game/wtfg_v1.0.rar</href>
+		<btntxt>点击下载</btntxt>
+	</example>
+	<example type="game">
+		<title>游戏引擎测试</title>
+		<time>2016-10-04</time>
+		<content>一个2D的游戏引擎测试，碰撞检测没写，只是简陋的用一点算法来勉强模拟。目前有个碰撞检测的难题正在解决。</content>
+		<href>game/a3.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="other">
+		<title>生成迷宫算法</title>
+		<time>2016-10-03</time>
+		<content>一个随机生成迷宫的算法,还有个小问题等待解决</content>
+		<href>other/mg/index.html</href>
+		<btntxt>点击进入</btntxt>
+	</example>
+	<example type="other">
+		<title>网页游戏服务器</title>
+		<time>2016-10-05</time>
+		<content>一个BS结构的服务器设想，如图&lt;img style='width:260px;' src='resource/gxt.png' alt='构想图'/&gt;</content>
+		<href>resource/gxt.png</href>
+		<btntxt>点击查看</btntxt>
+	</example>
+</article>

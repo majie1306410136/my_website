@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>Document</title>
+</head>
+<body>
+	<img src="" alt="点击拖动" id="pic" border="1" width="200" height="100" style="position: absolute;" onmousedown="f1();" onmousemove="f2();" onmouseup="f3();">
+</body>
+<script>
+	var t=false;
+	var ms_x,ms_y;
+	var c=document.getElementById('pic');
+	function f1(){
+		t=true;
+		ms_x=event.x-c.offsetLeft;
+		ms_y=event.y-c.offsetTop;
+	}
+	function f2(){
+		if(t){
+			c.style.left=event.x-ms_x+"px";
+			c.style.top=event.y-ms_y+"px";
+		}
+	}
+	function f3(){
+		t=false;
+	}
+</script>
+</html>

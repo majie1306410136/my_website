@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width" />
+  <title>test</title>
+  <style>
+    body{
+      overflow: hidden;
+    }
+    canvas{
+      margin-top: -10px;
+      margin-left: -10px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="mycanvas" style="border:1px solid #6c6c6c;background-color: black;"></canvas>
+</body>
+<script>
+
+mycanvas.width=window.innerWidth;
+mycanvas.height=window.innerHeight;
+var width=window.innerWidth;
+var height=window.innerHeight;
+var shownum=parseInt(width/10+height/40);               //出现点的个数
+var distance=width/15+height/50;              //多少距离一下会出现线
+var color="255,255,255";      //显示颜色
+var speed=1;                  //点的速度
+var linewidth=1;            //线的宽度
+var FPS=60;                   //每秒刷新帧数
+
+  var can=document.getElementById("mycanvas");
+  var ctx=can.getContext("2d");
+  var mx=0;
+  var my=0;
+  function Point(){
+    this.x=Math.random()*width;
+    this.y=Math.random()*height;
+    this.offsetx=Math.random()*(speed-0.1)-(speed-0.1)/2;
+    this.offsetx>0?this.offsetx+=0.2:this.offsetx-=0.2;
+    this.offsety=Math.random()*(speed-0.1)-(speed-0.1)/2;
+    this.offsety>0?this.offsety+=0.2:this.offsety-=0.2;
+    this.shut=true;
+  }
+
+  Point.prototype.draw=function(){
+    ctx.fillStyle="rgb("+color+")";
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,1.5,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  Point.prototype.move=function(){
+    this.x+=this.offsetx;
+    this.y+=this.offsety;
+  }
+  Point.prototype.back=function(){
+    this.x+=(mx-this.x)/distance*3;
+    this.y+=(my-this.y)/distance*3;
+  }
+
+  Point.prototype.check=function(){
+    if(this.x<0)
+      return true;
+    if(this.x>width)
+      return true;
+    if(this.y<0)
+      return true;
+    if(this.y>height)
+      return true;
+    return false;
+  }
+
+  var all=new Array(shownum);
+  all[0]=new Point();
+  all[0].x=2000;
+  all[0].y=2000;
+  all[0].offsetx=0;
+  all[0].offsety=0;
+  for(var i=1;i<shownum;i++){
+    all[i]=new Point();
+  }
+  window.onload=function(){
+    update();
+  }
+
+  function update(){
+    ctx.clearRect(0,0,width,height);
+    for(var i=1;i<all.length;i++){
+      if(all[i].check()){
+        all.splice(i,1);
+        while(all.length<=shownum){
+          all.push(new Point());
+        }
+      }
+    }
+    for(var i=0;i<all.length;i++){
+        all[i].move();
+        all[i].draw();
+    }
+    for(var i=1;i<all.length;i++){
+      for(var j=0;j<all.length;j++){
+        if(getDistance(all[0],all[j])<=distance){
+          all[j].shut=false;
+        }else if(!all[j].shut){
+          all[j].back();
+          all[j].shut=true;
+        }
+        if(getDistance(all[i],all[j])<=distance){
+          var d=distance+3;
+          ctx.lineWidth=linewidth;
+          ctx.strokeStyle="rgba("+color+","+((d-getDistance(all[i],all[j]))/distance+0.05)+")";
+          ctx.beginPath();
+          ctx.moveTo(all[i].x,all[i].y);
+          ctx.lineTo(all[j].x,all[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    setTimeout(update,1000/FPS);
+  }
+
+  function getDistance(a,b){
+    return Math.sqrt(Math.pow(a.x-b.x,2)+Math.pow(a.y-b.y,2));
+  }
+
+  document.onmousemove=function(event){
+    var e=event||window.event;
+    all[0].x=e.clientX;
+    all[0].y=e.clientY;
+    mx=e.clientX;
+    my=e.clientY;
+  }
+</script>
+</html>

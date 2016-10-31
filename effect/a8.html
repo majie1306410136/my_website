@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>表白动画</title>
+	<style>
+		body{
+			background-color: rgb(255,213,226);
+		}
+		#code{
+			position: absolute;
+			margin-left: 5%;
+			margin-top: 5%;
+			font-size: 14px;
+			font-family: Arial;
+		}
+		.note{
+			color: rgb(150,150,150);
+		}
+		.keyword{
+			color:rgb(167,0,118);
+			font-weight: bold;
+		}
+		.keyword1{
+			color:rgb(85,94,255);
+		}
+		.space{
+			padding-left: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="code">
+		<span class="note">//Create new object.</span><br/>
+		Boy<span class="space"></span>i<span class="space">=</span><span class="space"></span><span class="keyword">new</span><span class="space"></span>Boy("<span class="keyword1">boyname</span>");<br/>
+		Girl<span class="space"></span>u<span class="space">=</span><span class="space"></span><span class="keyword">new</span><span class="space"></span>Girl("<span class="keyword1">girlname</span>");<br/>
+		<span class="note">//xxxx/xx/xx, I told you I love you.</span><br/>
+		i.love(u);<br/>
+		<span class="note">//I am very excited, because you accepted me and be my girlfriend eversince.</span><br/>
+		u.accepted();<br/>
+		<span class="note">//Since then, I miss you every day.</span><br/>
+		i.miss(u);<br/>
+		<span class="note">//You said that you won't be so early to marry me.</span><br/>
+		<span class="note">//So I keep waiting for you.</span><br/>
+		<span class="keyword">boolean</span><span class="space"></span>isAccept<span class="space">=</span><span class="space"></span><span class="keyword">false</span>;<br/>
+		<span class="keyword">while</span>(!isAccept){<br/>
+		<span class="space"></span><span class="space"></span>i.wating(u);<br/>
+		<span class="space"></span><span class="space"></span>u.thinkover();<br/>
+		}<br/>
+		<span class="note">//In the future</span><br/>
+		i.marry(u);<br/>
+		i.liveHappilyWith(u);<br/>
+	</div>
+</body>
+<script>
+function start(){
+	var count=0;
+	var code=document.getElementById("code");
+	var context=code.innerHTML;
+	function type(){
+		if(context[count]=="<"){
+			count=count+context.substring(count,context.length).indexOf(">");
+		}
+		code.innerHTML=context.substring(0,count++)+"_";
+		if(count<context.length){
+			setTimeout(type,80);
+		}
+	}
+	var canvas=document.createElement("canvas");
+	canvas.style.marginLeft="600px";
+	canvas.width=600;
+	canvas.height=600;
+	document.body.appendChild(canvas);
+	var ctx=canvas.getContext("2d");
+	ctx.fillStyle="black";
+		var x=0;
+		var bl=false;
+		var ic=5;
+		var ar=new Array();
+		function pos(x,y){
+			this.x=x;
+			this.y=y;
+		}
+	function getpos(){
+		for(var i=0;i<1200/ic;i++){
+			if(!bl){
+				ar.push(new pos(300+x,200+100*Math.sqrt(Math.sqrt(300)-Math.sqrt(Math.abs(x)))));
+				x-=ic;
+				if(x<=-300){
+					bl=true;
+				}
+			}else{
+				ar.push(new pos(300+x,200-Math.sqrt(300*Math.abs(x)-x*x)));
+				x+=ic;
+				if(x>=300){
+					bl=false;
+				}
+			}
+		}
+	}
+	var index=0;
+	function update(){
+		if(index==0){
+			setTimeout(update,10000);
+		}
+		else if(index<ar.length-1)
+			setTimeout(update,20);
+		else{
+			drawDate();
+		}
+		ctx.strokeStyle="black";
+		ctx.beginPath();
+		ctx.moveTo(ar[index].x,ar[index].y);
+		if(index>=ar.length-1)
+			index=-1;
+		ctx.lineTo(ar[index+1].x,ar[index+1].y);
+		ctx.stroke();
+		index++;
+	}
+	Date.prototype.DateDiff = function(strInterval, dtEnd) {   
+    var dtStart = this;  
+    switch (strInterval) {   
+        case 's' :return parseInt((dtEnd - dtStart) / 1000);  
+        case 'n' :return parseInt((dtEnd - dtStart) / 60000);  
+        case 'h' :return parseInt((dtEnd - dtStart) / 3600000);  
+        case 'd' :return parseInt((dtEnd - dtStart) / 86400000);  
+        case 'w' :return parseInt((dtEnd - dtStart) / (86400000 * 7));  
+        case 'm' :return (dtEnd.getMonth()+1)+((dtEnd.getFullYear()-dtStart.getFullYear())*12) - (dtStart.getMonth()+1);  
+        case 'y' :return dtEnd.getFullYear() - dtStart.getFullYear();  
+    }  
+}  
+var a=0;
+var d,h,m,s;
+	function getDate(){
+		var date=new Date();
+		var mydate=new Date(2000,1,1,18,30,00);
+		d=mydate.DateDiff("d",date);
+		var scd=mydate.DateDiff("s",date);
+		scd=scd-d*86400;
+		h=parseInt(scd/3600);
+		m=parseInt(scd%3600/60);
+		s=scd%3600%60;
+		setTimeout(getDate,1000);
+	}
+	function drawDate(){
+		a+=0.05;
+		ctx.fillStyle="rgba(105,105,105,"+a+")";
+		ctx.font="25px Arial";
+		ctx.clearRect(20,220,460,30);
+		ctx.fillText("亲爱的，这是我们在一起的时光：",20,240);
+		ctx.clearRect(70,260,480,30);
+		var dt=d+" days "+h+" hours "+m+" minutes "+s+" seconds";
+		ctx.fillText(dt,70,280);
+		ctx.clearRect(250,300,200,100);
+		ctx.fillText("Love you forever",250,350);
+		ctx.font="15px Arial";
+		ctx.fillText("——XXX",375,375);
+		setTimeout(drawDate,100);
+	}
+	type();
+	getpos();
+	update();
+	getDate();
+}
+start();
+</script>
+</html>

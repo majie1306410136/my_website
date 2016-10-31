@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>3D坐标系</title>
+</head>
+<body style="overflow: hidden;">
+	<canvas id="mycanvas" style="margin: -8px;"></canvas>
+</body>
+<script>
+	var canvas=document.getElementById("mycanvas");
+	var ctx=canvas.getContext("2d");
+	canvas.width=1000;
+	canvas.height=600;
+
+	var cx=canvas.width/2;
+	var cy=canvas.height/2;
+
+	var msdown=false;
+
+	var zoom=1;
+	var length=300;
+	var tn=100;
+	var ty=500;
+	var tz=1000;
+
+
+	var Ypos=new Point2D(cx,(cy-length+50)*zoom);
+	var Xpos=new Point2D();
+	var Zpos=new Point2D();
+
+	var horizontal_angel=45;
+	var angel=15;
+
+	function GetNewAxis(){
+		Zpos.x=cx-Math.cos(horizontal_angel*Math.PI/180)*length*zoom;
+		Zpos.y=cy+Math.sin(horizontal_angel*Math.PI/180)*length*zoom*Math.sin(angel*Math.PI/180);
+		Xpos.x=cx-Math.cos((horizontal_angel+90)*Math.PI/180)*length*zoom;
+		Xpos.y=cy+Math.sin((horizontal_angel+90)*Math.PI/180)*length*zoom*Math.sin(angel*Math.PI/180);
+	}
+
+	function PointTo2D(a){
+		var agl=Math.atan(a.x/a.z)+horizontal_angel*Math.PI/180;
+		if(a.x>0){
+			a.z>0?agl=agl:agl=agl+Math.PI;
+		}else{
+			a.z>0?agl=agl:agl=agl-Math.PI;
+		}
+		var rds=Math.sqrt(a.x*a.x+a.z*a.z);
+		if(a.z==0){
+			var x=cx+Math.cos(agl)*rds*(tz-tn)/(tz-a.z*Math.sin(horizontal_angel*Math.PI/180)-a.x*Math.sin((horizontal_angel+90)*Math.PI/180));
+			var y=cy-(Math.sin(agl)*rds*Math.sin(angel*Math.PI/180)-a.y)*(tz-tn)/(tz-a.z*Math.sin(horizontal_angel*Math.PI/180)-a.x*Math.sin((horizontal_angel+90)*Math.PI/180));
+		}else{
+			var x=cx-Math.cos(agl)*rds*(tz-tn)/(tz-a.z*Math.sin(horizontal_angel*Math.PI/180)-a.x*Math.sin((horizontal_angel+90)*Math.PI/180));
+			var y=cy+(Math.sin(agl)*rds*Math.sin(angel*Math.PI/180)-a.y)*(tz-tn)/(tz-a.z*Math.sin(horizontal_angel*Math.PI/180)-a.x*Math.sin((horizontal_angel+90)*Math.PI/180));
+		}
+		return new Point2D(x,y);
+	}
+
+	function Point2D(x,y){
+		this.x=x;
+		this.y=y;
+	}
+
+	function Point(x,y,z){
+		this.x=x;
+		this.y=y;
+		this.z=z;	
+	}
+
+	function Drawgird(){
+		ctx.strokeStyle="#cccccc";
+		for(var i=-8;i<9;i++){
+			ctx.moveTo(PointTo2D(new Point(i*50,0,450)).x,PointTo2D(new Point(i*50,0,450)).y);
+			ctx.lineTo(PointTo2D(new Point(i*50,0,-450)).x,PointTo2D(new Point(i*50,0,-450)).y);
+			ctx.moveTo(PointTo2D(new Point(450,0,i*50)).x,PointTo2D(new Point(450,0,i*50)).y);
+			ctx.lineTo(PointTo2D(new Point(-450,0,i*50)).x,PointTo2D(new Point(-450,0,i*50)).y);
+		}
+		ctx.stroke();
+	}
+
+	function Ball(position,radius){
+		this.position=position;
+		this.radius=radius;
+	}
+
+	Ball.prototype.draw=function(){
+		ctx.beginPath();
+		ctx.strokeStyle="gray";
+		ctx.arc(PointTo2D(this.position).x,PointTo2D(this.position).y,this.radius,0,Math.PI*2);
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.moveTo(PointTo2D(this.position).x-this.radius,PointTo2D(this.position).y);
+		ctx.quadraticCurveTo(PointTo2D(this.position).x,PointTo2D(this.position).y+this.radius*Math.sin(2*angel*Math.PI/180),PointTo2D(this.position).x+this.radius,PointTo2D(this.position).y);
+		ctx.stroke();
+		ctx.moveTo(PointTo2D(this.position).x-this.radius,PointTo2D(this.position).y);
+		ctx.quadraticCurveTo(PointTo2D(this.position).x,PointTo2D(this.position).y-this.radius*Math.sin(2*angel*Math.PI/180),PointTo2D(this.position).x+this.radius,PointTo2D(this.position).y);
+		ctx.stroke();
+	}
+
+	var a1=new Point(-100,0,100);
+	var a2=new Point(100,0,100);
+	var a3=new Point(100,0,200);
+	var a4=new Point(-100,0,200);
+	var a5=new Point(-100,100,100);
+	var a6=new Point(100,100,100);
+	var a7=new Point(100,100,200);
+	var a8=new Point(-100,100,200);
+
+	var b1=new Ball(new Point(100,50,-100),50);
+
+
+	var count=1;
+	var FPS=60;
+	function Update(){
+		ctx.clearRect(0,0,2000,2000);
+		count++;
+		GetNewAxis();
+		Drawgird();
+		ctx.strokeStyle="blue";
+		ctx.beginPath();
+		ctx.moveTo(cx,cy);
+		ctx.lineTo(Ypos.x,Ypos.y);
+		ctx.stroke();
+		ctx.strokeStyle="red";
+		ctx.beginPath();
+		ctx.moveTo(cx,cy);
+		ctx.lineTo(Xpos.x,Xpos.y);
+		ctx.stroke();
+		ctx.strokeStyle="yellow";
+		ctx.beginPath();
+		ctx.moveTo(cx,cy);
+		ctx.lineTo(Zpos.x,Zpos.y);
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.strokeStyle="gray";
+		ctx.moveTo(PointTo2D(a1).x,PointTo2D(a1).y);
+		ctx.lineTo(PointTo2D(a2).x,PointTo2D(a2).y);
+		ctx.lineTo(PointTo2D(a3).x,PointTo2D(a3).y);
+		ctx.lineTo(PointTo2D(a4).x,PointTo2D(a4).y);
+		ctx.lineTo(PointTo2D(a1).x,PointTo2D(a1).y);
+		ctx.lineTo(PointTo2D(a5).x,PointTo2D(a5).y);
+		ctx.lineTo(PointTo2D(a6).x,PointTo2D(a6).y);
+		ctx.lineTo(PointTo2D(a7).x,PointTo2D(a7).y);
+		ctx.lineTo(PointTo2D(a8).x,PointTo2D(a8).y);
+		ctx.lineTo(PointTo2D(a5).x,PointTo2D(a5).y);
+		ctx.moveTo(PointTo2D(a2).x,PointTo2D(a2).y);
+		ctx.lineTo(PointTo2D(a6).x,PointTo2D(a6).y);
+		ctx.moveTo(PointTo2D(a3).x,PointTo2D(a3).y);
+		ctx.lineTo(PointTo2D(a7).x,PointTo2D(a7).y);
+		ctx.moveTo(PointTo2D(a4).x,PointTo2D(a4).y);
+		ctx.lineTo(PointTo2D(a8).x,PointTo2D(a8).y);
+		ctx.stroke();
+		b1.draw();
+
+		ctx.fillStyle="#6c6c6c";
+		ctx.fillText("x",Xpos.x,Xpos.y);
+		ctx.fillText("y",Ypos.x,Ypos.y);
+		ctx.fillText("z",Zpos.x,Zpos.y);
+		ctx.fillText("点击后拖动改变视角",30,50);
+		ctx.fillText("vercital angle:"+angel,30,65);
+		ctx.fillText("horizontal angle:"+horizontal_angel%360,30,80);
+		ctx.fillText("FPS:"+FPS,30,95);
+
+		setTimeout(Update,1000/60);
+	}
+
+	function CountFPS(){
+		setTimeout(CountFPS,1000);
+		FPS=count;
+		count=0;
+	}
+
+	Update();
+	CountFPS();
+
+
+	var nowposx,nowposy;
+
+	window.onmousedown=function(event){
+		var e=event||window.event;
+		msdown=true;
+		nowposx=e.clientX;
+		nowposy=e.clientY;
+	}
+
+	window.onmousemove=function(event){
+		var e=event||window.event;
+		if(msdown){
+			if(nowposx>e.clientX){
+				horizontal_angel-=1;
+			}
+			else{
+				horizontal_angel+=1;
+			}
+			if(nowposy>e.clientY){
+				angel--;
+			}else{
+				angel++;
+			}
+			if(angel>20){
+				angel=20;
+			}
+			if(angel<-20){
+				angel=-20;
+			}
+			nowposx=e.clientX;
+			nowposy=e.clientY;
+		}
+	}
+
+	window.onmouseup=function(event){
+		var e=event||window.event;
+		msdown=false;
+	}
+
+</script>
+</html>

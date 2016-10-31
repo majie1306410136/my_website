@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>test</title>
+	<style>
+		body{
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="mycanvas" width="1400" height="700" style="border:1px solid black;background-color: black;margin: -8px -8px;"></canvas>
+</body>
+<script>
+	var canvas=document.getElementById("mycanvas");
+	var ctx=canvas.getContext("2d");
+	var mx,my;
+	mx=200,my=200;
+	var FPS=60;
+	var createspeed=5;
+	var dis=1;
+	var dn=false;
+	var all=new Array();
+
+
+	function Circle(){
+		this.radius=Math.random()*10+10;
+		if(!dn){
+				this.offsetX=dis*(Math.random()*4-2);
+				this.offsetY=dis*(Math.random()*7-2);
+			while(Math.sqrt(Math.pow(this.offsetX,2)+Math.pow(this.offsetY,2))<2){
+				this.offsetX=dis*(Math.random()*4-2);
+				this.offsetY=dis*(Math.random()*7-2);
+			}
+		}else{
+			this.offsetX=dis*(Math.random()*10-5);
+			this.offsetY=dis*(Math.random()*10-5);
+			while(Math.sqrt(Math.pow(this.offsetX,2)+Math.pow(this.offsetY,2))<2){
+				this.offsetX=dis*(Math.random()*10-5);
+				this.offsetY=dis*(Math.random()*10-5);
+			}
+		}
+		this.x=mx+Math.random()*5;
+		this.y=my+Math.random()*5;
+		this.redc=-Math.random()*0.1+0.2;
+		this.ct=2;
+		this.color=parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+","+parseInt(Math.random()*255);
+		this.alpha=0.8;
+		this.distroy=false;
+	}
+
+	Circle.prototype.draw=function(){
+		ctx.fillStyle="rgba("+this.color+","+this.alpha+")";
+		ctx.beginPath();
+		ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+		ctx.fill();
+	}
+
+	Circle.prototype.move=function(){
+		if(this.ct<=0){
+			this.x+=this.offsetX;
+			this.y+=this.offsetY;
+			this.alpha-=0.001;
+			this.radius-=this.redc;
+			this.offsetY+=0.05;
+			if(this.alpha<=0.3){
+				this.distroy=true;
+			}
+			if(this.radius<1)
+				this.radius=1;
+		}
+		this.ct--;
+	}
+	Circle.prototype.check=function(){
+		if(this.x<0)
+			return true;
+		if(this.x>1400)
+			return true;
+		if(this.y<0)
+			return true;
+		if(this.y>700)
+			return true;
+		return false;
+	}
+	var count=0;
+	function update(){
+		ctx.clearRect(0,0,2000,1000);
+		if(count%createspeed==0)
+			all.push(new Circle());
+		count++;
+		for(var i=0;i<all.length;i++){
+			all[i].draw();
+			all[i].move();
+			if(all[i].distroy){
+				all.splice(i,1);
+			}
+			if(all[i].check()){
+				all.splice(i,1);
+			}
+		}
+		setTimeout(update,1000/FPS);
+	}
+	update();
+
+
+	document.onmousemove=function(event){
+		var e=event||window.event;
+		mx=e.clientX;
+		my=e.clientY;
+		if(mx<0)
+			mx=0;
+		if(my<0)
+			my=0;
+	}
+
+	document.onmousedown=function(event){
+		var e=event||window.event;
+		createspeed=1;
+		dis=2;
+		dn=true;
+		if(all.length<300)
+			for(var i=0;i<30;i++){
+				all.push(new Circle());
+			}
+	}
+	document.onmouseup=function(event){
+		var e=event||window.event;
+		createspeed=4;
+		dis=1;
+		dn=false;
+	}
+
+</script>
+</html>

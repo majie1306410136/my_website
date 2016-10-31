@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<style>
+		body{
+			background-color: black;
+		}
+	</style>
+</head>
+<body scroll="no">
+	
+</body>
+<script>
+	var imgsrc="../resource/fj.jpg";
+	var msdis=30;
+	var wd=10;
+	var img=new Image();
+	img.src=imgsrc;
+	var arr=[];
+	var parr=[];
+	var posarr=[];
+	var mv=[];
+	var mx=0,my=0;
+	img.onload=function(){
+		for(var i=0;i<parseInt(img.height)/wd;i++){
+			arr[i]=[];
+			parr[i]=[];
+			posarr[i]=[];
+			mv[i]=[];
+			for(var j=0;j<parseInt(img.width)/wd;j++){
+				var a=document.createElement("div");
+				a.style.width=wd+"px";
+				a.style.height=wd+"px";
+				a.style.position="absolute";
+				a.style.left=300+j*wd+"px";
+				a.style.top=200+i*wd+"px";
+				posarr[i].push([300+j*wd,200+i*wd]);
+				parr[i].push([300+j*wd,200+i*wd]);
+				mv[i].push(false);
+				a.style.backgroundImage="url("+imgsrc+")";
+				a.style.backgroundPosition=(-j)*wd+"px "+(-i)*wd+"px";
+				document.body.appendChild(a);
+				arr[i].push(a);
+			}
+		}
+	update();
+	}
+	window.onmousemove=function(event){
+		mx=event.clientX;
+		my=event.clientY;
+	}
+	function update(){
+		for(var i=0;i<parseInt(img.height)/wd;i++){
+			for(var j=0;j<parseInt(img.width)/wd;j++){
+				var dis=Math.abs(Math.sqrt(Math.pow(mx-parr[i][j][0],2)+Math.pow(my-parr[i][j][1],2)));
+				if(dis<msdis){
+					var angle=Math.atan2(my-parr[i][j][1],mx-parr[i][j][0]);
+					parr[i][j]=[parr[i][j][0]+dis*Math.cos(angle)*Math.random()*40-20,parr[i][j][1]+dis*Math.sin(angle)*Math.random()*40-20];
+					mv[i][j]=true;
+				}
+			}
+		}
+		for(var i=0;i<parseInt(img.height)/wd;i++){
+			for(var j=0;j<parseInt(img.width)/wd;j++){
+				var dis=Math.abs(Math.sqrt(Math.pow(posarr[i][j][0]-parr[i][j][0],2)+Math.pow(posarr[i][j][1]-parr[i][j][1],2)));
+				if(mv[i][j]){
+					if(dis>wd){
+						var angle=Math.atan2(posarr[i][j][1]-parr[i][j][1],posarr[i][j][0]-parr[i][j][0]);
+						parr[i][j]=[parr[i][j][0]+dis*Math.cos(angle)/wd,parr[i][j][1]+dis*Math.sin(angle)/wd];
+					}else{
+						parr[i][j]=[posarr[i][j][0],posarr[i][j][1]];
+						mv[i][j]=false;
+					}
+				}
+			}
+		}
+		for(var i=0;i<parseInt(img.height)/wd;i++){
+			for(var j=0;j<parseInt(img.width)/wd;j++){
+				arr[i][j].style.left=parr[i][j][0]+"px";
+				arr[i][j].style.top=parr[i][j][1]+"px";
+			}
+		}
+		requestAnimationFrame(update);
+	}
+</script>
+</html>

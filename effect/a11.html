@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<title>Document</title>
+</head>
+<body style="text-align: center;margin: 0px;">
+	<canvas id="mycanvas" width="600" height="400" style="border:1px solid black;border-radius: 10px;background-color: black;"></canvas>
+</body>
+<script>
+	Array.prototype.remove=function(a){
+		var k=false;
+		for(var i=0;i<this.length;i++){
+			if(!k){
+				if(this[i]==a){
+					this[i]=this[i+1];
+					k=true;
+				}
+			}else{
+				this[i]=this[i+1];
+			}
+		}
+		if(k)
+			this.pop();
+	}
+	var canvas=document.getElementById('mycanvas');
+	var ctx=canvas.getContext("2d");
+	var gravity=0.1,arr=[],px=0,length=4,cirarr=[];
+	function Pos(x,y){this.x=x;this.y=y;}
+	function Point(pos){this.path=[];this.pos=pos;this.hure=parseInt((pos.x+px)*360/1200);this.speed=new Pos(Math.random()*0.02-0.01,0);this.ishit=false;}
+	Point.prototype.update=function(){
+		this.speed.y+=gravity;
+		this.pos.x+=this.speed.x;
+		this.pos.y+=this.speed.y;
+		this.path.unshift(new Pos(this.pos.x,this.pos.y));
+		for(var i=0;i<cirarr.length;i++){
+			if(Math.abs(Math.sqrt(Math.pow(cirarr[i].pos.x-this.pos.x,2)+Math.pow(cirarr[i].pos.y-this.pos.y,2)))<=cirarr[i].radius){
+				this.speed=new Pos(0,0);
+				this.speed.x=-(cirarr[i].pos.x-this.pos.x)*(Math.random()*0.02+0.01);
+				this.speed.y=-(cirarr[i].pos.y-this.pos.y)*(Math.random()*0.02+0.01)/2;
+				this.ishit=true;
+				if(cirarr[i].add){
+					cirarr[i].hit++;
+				}
+				else{
+					cirarr[i].radius-=cirarr[i].hit*0.0001;
+					cirarr[i].hit=0;
+					cirarr[i].radius-=0.1;
+					if(cirarr[i].radius<0)
+						cirarr[i].radius=0;
+				}
+			}
+		}
+		if(this.path.length>length)
+			this.path.pop();
+		if(this.pos.y>400){
+			arr.remove(this);
+		}
+		this.draw();
+	}
+	Point.prototype.draw=function(){
+		ctx.lineWidth=1;
+		ctx.strokeStyle="hsla("+this.hure+",50%,30%,0.3)";
+		ctx.beginPath();
+		ctx.moveTo(this.pos.x,this.pos.y);
+		this.path.forEach(function(e){
+			ctx.lineTo(e.x,e.y);
+		})
+		ctx.closePath();
+		ctx.stroke();
+		if(this.ishit){
+				ctx.fillStyle="hsla("+this.hure+",80%,15%,0.05)";
+				ctx.beginPath();
+				ctx.arc(this.pos.x,this.pos.y,Math.random()*24+1,0,Math.PI*2);
+				ctx.closePath();
+				ctx.fill();
+		}
+	}
+
+	function Circle(pos){this.pos=pos;this.radius=10;this.maxradius=100+Math.random()*50,this.add=true;this.hit=0;}
+	Circle.prototype.update=function(){
+		if(this.add){
+			this.radius++;
+			if(this.radius>this.maxradius)
+				this.add=false;
+		}
+		if(this.radius<10){
+			cirarr.remove(this);
+		}
+		this.draw();
+	}
+	Circle.prototype.draw=function(){
+		ctx.fillStyle="rgba(20,20,20,0.3)";
+		ctx.beginPath();
+		ctx.arc(this.pos.x,this.pos.y,this.radius,0,Math.PI*2);
+		ctx.closePath();
+		ctx.fill();
+	}
+	function update(){
+		ctx.globalCompositeOperation = 'source-over';
+		cirarr.forEach(function(e){
+			e.update();
+		});
+		while(cirarr.length<20){
+			cirarr.push(new Circle(new Pos(Math.random()*500+50,Math.random()*200+250)));
+		}
+		ctx.fillStyle="rgba(0,0,0,0.1)";
+		ctx.fillRect(0,0,1000,1000);
+		self.ctx.globalCompositeOperation = 'lighter';
+		arr.push(new Point(new Pos(Math.random()*600,-Math.random()*30)));
+		arr.push(new Point(new Pos(Math.random()*600,-Math.random()*30)));
+		arr.forEach(function(e){
+			e.update();
+		});
+		requestAnimationFrame(update);
+	}
+	setInterval(function(){px+=60},3000);
+	setInterval(function(){for(var i=0;i<200;i++)arr.push(new Point(new Pos(Math.random()*600,-Math.random()*100)));},10000);
+	for(var i=0;i<20;i++){
+		cirarr.push(new Circle(new Pos(Math.random()*500+50,Math.random()*200+250)));
+	}
+	update();
+</script>
+</html>

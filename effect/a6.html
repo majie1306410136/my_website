@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width" />
+	<title>test</title>
+	<style>
+		body{
+      position: absolute;
+			overflow: hidden;
+		}
+		canvas{
+      position: absolute;
+			margin-left: -8px;
+			margin-top: -8px;
+			background-color: black;
+		}
+    #text{
+      position: absolute;
+      left: 100px;
+      top: 20px;
+      width: 200px;
+    }
+    #btn{
+      position: absolute;
+      left: 320px;
+      top: 20px;
+    }
+	</style>
+</head>
+<body>
+	<canvas id="mycanvas"></canvas>
+  <input type="text" id="text" placeholder="请输入字符串"><input type="button" id="btn" value="ok" onclick="clkbtn();">
+</body>
+<script>
+    mycanvas.width=window.innerWidth;
+    mycanvas.height=window.innerHeight;
+	  var can=document.getElementById("mycanvas");
+  	var ctx=can.getContext("2d");
+    var dis= mycanvas.width/100+mycanvas.height/300;
+    ctx.fontStyle="Arial";
+  	var mx=0;
+  	var my=0;
+  	var radius=100;               //圆圈半径
+    var num="";
+
+ 
+
+    String.prototype.getWidth = function(fontSize)  //获取字符串宽度
+    {  
+        var span = document.getElementById("__getwidth");  
+        if (span == null) {  
+            span = document.createElement("span");  
+            span.id = "__getwidth";  
+            document.body.appendChild(span);  
+            span.style.visibility = "hidden";  
+            span.style.whiteSpace = "nowrap"; 
+        }  
+        span.innerText = this;  
+        span.style.fontSize = fontSize;
+        return span.offsetWidth;  
+    }  
+
+  	function Point(x,y,speed){
+  		this.posx=x;
+  		this.posy=y;
+  		this.x=this.posx;
+  		this.y=this.posy;
+  		this.offsetX=0;
+  		this.offsetY=0;
+  		this.inms=false;
+  		this.speed=speed;
+  		this.respeed=0.5;
+  	}
+
+  	Point.prototype.move=function(){
+  		this.x+=this.offsetX;
+  		this.y+=this.offsetY;
+  	}
+
+  	Point.prototype.draw=function(){
+  		ctx.fillStyle="white";
+  		ctx.fillRect(this.x,this.y,2,2);
+  	}
+
+
+  	Point.prototype.check=function(){
+  		if(Math.sqrt(Math.pow(mx-this.x,2)+Math.pow(my-this.y,2))<=radius){
+  			var kkk;
+  			Math.random()<0.8?kkk=Math.random()*5+5:kkk=Math.random()*150+50;
+  			return true;
+  			this.speed=kkk;
+  		}else{
+  			return false;
+  		}
+  	}
+
+  	Point.prototype.checkpos=function(){
+  		var a=Math.sqrt(Math.pow(this.x-this.posx,2)+Math.pow(this.y-this.posy,2));
+  		if(a>100){
+  			this.respeed=5;
+  		}else if(a>50){
+  			this.respeed=2;
+  		}else if(a>10){
+  			this.respeed=1;
+  		}else{
+  			this.respeed=0.5;
+  		}
+  		if(a<=0.5){
+  			return true;
+  		}else{
+  			return false;
+  		}
+  	}
+
+  	var all=new Array();
+
+  	for(var i=0;i<21;i++){
+  		for(var j=0;j<80;j++){
+  			var kkk;
+  			Math.random()<0.8?kkk=Math.random()*dis+5:kkk=Math.random()*200+100;
+  			all.push(new Point(dis*j+100,dis*i+100,kkk));
+  			all[i*50+j].x=Math.random()*600;
+  			all[i*50+j].y=Math.random()*600;
+  		}
+  	}
+
+    function clkbtn(){
+      num="";
+      all=new Array();
+      var text=document.getElementById("text").value||"12345";
+      var canvas=document.getElementById("_cvs");
+      if(canvas==null){
+        canvas = document.createElement("canvas");
+        canvas.id="_cvs";
+        document.body.appendChild(canvas);
+        canvas.style.visibility="hidden";
+      }
+      var ctx1=canvas.getContext("2d");
+      ctx1.clearRect(0,0,10000,10000);
+      ctx1.font="20px Arial";
+      ctx1.fillText(text.toString(),0,20);
+      var imgData=ctx1.getImageData(0,0,parseInt(text.toString().getWidth("20px"))+5,21);
+      for(var i=0;i<imgData.data.length;i+=4){
+        if(imgData.data[i+3]==0){
+          num+="0";
+        }else{
+          num+="1";
+        }
+      }
+      console.log(text.toString());
+      for(var i=0;i<25;i++){
+        for(var j=0;j<parseInt(text.toString().getWidth("20px"))+5;j++){
+          var kkk;
+          Math.random()<0.8?kkk=Math.random()*5+5:kkk=Math.random()*200+100;
+          all.push(new Point(dis*j,dis*i+100,kkk));
+          all[i*(parseInt(text.toString().getWidth("20px"))+5)+j].x=Math.random()*600;
+          all[i*(parseInt(text.toString().getWidth("20px"))+5)+j].y=Math.random()*600;
+        }
+      }
+    }
+
+  	function update(){
+  		ctx.clearRect(0,0,2000,2000);
+
+  		for(var i=0;i<all.length;i++){
+  			if(all[i].check()){
+  				all[i].offsetX=Math.sqrt(Math.pow(all[i].x-mx,2)/(Math.pow(all[i].y-my,2)+Math.pow(all[i].x-mx,2)))*Math.random()*all[i].speed;
+  				all[i].offsetY=Math.sqrt(Math.pow(all[i].y-my,2)/(Math.pow(all[i].y-my,2)+Math.pow(all[i].x-mx,2)))*Math.random()*all[i].speed;
+  				all[i].x-mx>0?all[i].offsetX=all[i].offsetX:all[i].offsetX=-all[i].offsetX;
+  				all[i].y-my>0?all[i].offsetY=all[i].offsetY:all[i].offsetY=-all[i].offsetY;
+  			}else{
+  				if(!all[i].checkpos()){
+	  				all[i].offsetX=Math.sqrt(Math.pow(all[i].x-all[i].posx,2)/(Math.pow(all[i].y-all[i].posy,2)+Math.pow(all[i].x-all[i].posx,2)))*all[i].respeed;
+	  				all[i].offsetY=Math.sqrt(Math.pow(all[i].y-all[i].posy,2)/(Math.pow(all[i].y-all[i].posy,2)+Math.pow(all[i].x-all[i].posx,2)))*all[i].respeed;
+	  				all[i].x-all[i].posx>0?all[i].offsetX=-all[i].offsetX:all[i].offsetX=all[i].offsetX;
+	  				all[i].y-all[i].posy>0?all[i].offsetY=-all[i].offsetY:all[i].offsetY=all[i].offsetY;
+	  			}else{
+	  				all[i].offsetX=0;
+	  				all[i].offsetY=0;
+	  			}
+  			}
+	  		all[i].move();
+	  		if(num.charAt(i)!="1")
+	  			all[i].draw();
+  		}
+  		setTimeout(update,1000/60);
+  	}
+    clkbtn();
+  	update();
+
+  	document.onmousemove=function(event){
+  		var e=event||window.event;
+  		mx=e.clientX;
+  		my=e.clientY;
+  	}
+
+</script>
+</html>

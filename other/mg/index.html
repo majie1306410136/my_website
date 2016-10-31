@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+<script>
+
+
+	var res=[];
+	var ranIdx=[4,10,14,15];
+	var index=3;
+	var count=0;
+	for(var i=1;i<16;i++){
+		res[i]=new Res(i+".png");
+	}
+
+	function Res(src,dir){
+		this.src=src;
+		this.dir=dir;
+	}
+	res[1].dir="0100";
+	res[2].dir="0010";
+	res[3].dir="0001";
+	res[4].dir="1000";
+	res[5].dir="1010";
+	res[6].dir="0101";
+	res[7].dir="0110";
+	res[8].dir="0011";
+	res[9].dir="1001";
+	res[10].dir="1100";
+	res[11].dir="1110";
+	res[12].dir="0111";
+	res[13].dir="1011";
+	res[14].dir="1101";
+	res[15].dir="1111";
+
+	function position(x,y){
+		this.x=x;
+		this.y=y;
+	}
+
+	function map(res,a,b,c,d,pos){
+		this.res=res;
+		this.up=a;
+		this.right=b;
+		this.down=c;
+		this.left=d;
+		this.ele=null;
+		this.isdraw=false;
+		this.pos=pos;
+		if(res.dir[0]==1&&this.up==null){
+			this.up=createMap(3,ranIdx[index],this);
+		}
+		if(res.dir[1]==1&&this.right==null){
+			this.right=createMap(4,ranIdx[index],this);
+		}
+		if(res.dir[2]==1&&this.down==null){
+			this.down=createMap(1,ranIdx[index],this);
+		}
+		if(res.dir[3]==1&&this.left==null){
+			this.left=createMap(2,ranIdx[index],this);
+		}
+	}
+
+
+	function createMap(dir,rani,par){
+		count++;
+		if(count%8==0){
+			index--;
+			if(index<0)
+				index=0;
+		}
+		var a;
+		switch(dir){
+			case 1:
+				do{
+					a=res[parseInt(Math.random()*rani)+1];
+				}while(a.dir[0]!="1");
+				return new map(a,par,null,null,null,new position(par.pos.x,par.pos.y+45));
+				break;
+			case 2:
+				do{
+					a=res[parseInt(Math.random()*rani)+1];
+				}while(a.dir[1]!="1");
+				return new map(a,null,par,null,null,new position(par.pos.x-45,par.pos.y));
+				break;
+			case 3:
+				do{
+					a=res[parseInt(Math.random()*rani)+1];
+				}while(a.dir[2]!="1");
+				return new map(a,null,null,par,null,new position(par.pos.x,par.pos.y-45));
+				break;
+			case 4:
+				do{
+					a=res[parseInt(Math.random()*rani)+1];
+				}while(a.dir[3]!="1");
+				return new map(a,null,null,null,par,new position(par.pos.x+45,par.pos.y));
+				break;
+		}
+	}
+
+	function draw(map){
+		if(!map.isdraw){
+			map.isdraw=true;
+			var k=document.createElement("img");
+			k.src=map.res.src;
+			k.style.position="absolute";
+			k.style.left=map.pos.x+"px";
+			k.style.top=map.pos.y+"px";
+			map.ele=k;
+			document.body.appendChild(k);
+			if(map.up!=null){
+				draw(map.up);
+			}
+			if(map.right!=null){
+				draw(map.right);
+			}
+			if(map.down!=null){
+				draw(map.down);
+			}
+			if(map.left!=null){
+				draw(map.left);
+			}
+		}
+	}
+	var n,now;
+	function init(){
+		var new_map=new map(res[parseInt(Math.random()*11)+5],null,null,null,null,new position(600,400));
+		now=new_map;
+		console.log(new_map);
+		draw(new_map);
+		n=document.createElement("div");
+		n.style.width="20px";
+		n.style.height="20px";
+		n.style.backgroundColor="#ff6666";
+		n.style.position="absolute";
+		n.style.left=new_map.pos.x+15+"px";
+		n.style.top=new_map.pos.y+15+"px";
+		document.body.appendChild(n);
+	}
+	init();
+
+	function dr(){
+		n.style.left=now.ele.offsetLeft+15+"px";
+		n.style.top=now.ele.offsetTop+15+"px";
+	}
+
+	document.onkeydown=function(event){
+			console.log(now);
+		switch(event.keyCode){
+			case 37:if(now.left!=null){now=now.left;dr();}break;
+			case 38:if(now.up!=null){now=now.up;dr();}break;
+			case 39:if(now.right!=null){now=now.right;dr();}break;
+			case 40:if(now.down!=null){now=now.down;dr();}break;
+		}
+	}
+</script>
+</html>
